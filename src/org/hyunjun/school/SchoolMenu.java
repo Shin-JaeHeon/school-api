@@ -5,26 +5,26 @@ package org.hyunjun.school;
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
- * @version 3.0
+ * @version 3.0.4
  */
 public class SchoolMenu {
     /**
      * 조식
      */
-    public String breakfast;
+    public StringBuilder breakfast;
 
     /**
      * 중식
      */
-    public String lunch;
+    public StringBuilder lunch;
 
     /**
      * 석식
      */
-    public String dinner;
+    public StringBuilder dinner;
 
     public SchoolMenu() {
-        breakfast = lunch = dinner = "급식이 없습니다";
+        breakfast = lunch = dinner = new StringBuilder("급식이 없습니다");
     }
 
     @Override

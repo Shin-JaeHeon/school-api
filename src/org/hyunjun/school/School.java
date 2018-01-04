@@ -12,7 +12,7 @@ import java.util.List;
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
- * @version 3.0
+ * @version 3.0.4
  */
 public class School {
 
@@ -110,7 +110,7 @@ public class School {
         targetUrl.append("schYm=" + year + String.format("%02d", month) + "&");
 
         try {
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            String content = getContentFromUrl(new URL(targetUrl.toString()));
             return SchoolMenuParser.parse(content);
         } catch (MalformedURLException e) {
             throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
@@ -126,23 +126,23 @@ public class School {
      */
     public List<SchoolSchedule> getMonthlySchedule(int year, int month) throws SchoolException {
 
-        StringBuffer targetUrl = new StringBuffer("http://" + schoolRegion.url + "/" + SCHEDULE_URL);
+        StringBuilder targetUrl = new StringBuilder("http://");
+        targetUrl.append(schoolRegion.url).append("/").append(SCHEDULE_URL);
         targetUrl.append("?");
-        targetUrl.append("schulCode=" + schoolCode + "&");
-        targetUrl.append("schulCrseScCode=" + schoolType.id + "&");
-        targetUrl.append("schulKndScCode=" + "0" + schoolType.id + "&");
-        targetUrl.append("ay=" + year + "&");
-        targetUrl.append("mm=" + String.format("%02d", month) + "&");
-
+        targetUrl.append("schulCode=").append(schoolCode).append("&");
+        targetUrl.append("schulCrseScCode=").append(schoolType.id).append("&");
+        targetUrl.append("schulKndScCode=" + "0").append(schoolType.id).append("&");
+        targetUrl.append("ay=").append(year).append("&");
+        targetUrl.append("mm=").append(String.format("%02d", month)).append("&");
         try {
-            String content = getContentFromUrl(new URL(targetUrl.toString()), "<tbody>", "</tbody>");
+            String content = getContentFromUrl(new URL(targetUrl.toString()));
             return SchoolScheduleParser.parse(content);
         } catch (MalformedURLException e) {
             throw new SchoolException("교육청 접속 주소가 올바르지 않습니다.");
         }
     }
 
-    private String getContentFromUrl(URL url, String readAfter, String readBefore) throws SchoolException {
+    private String getContentFromUrl(URL url) throws SchoolException {
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -154,11 +154,11 @@ public class School {
 
             while ((inputLine = reader.readLine()) != null) {
                 if (reading) {
-                    if (inputLine.contains(readBefore))
+                    if (inputLine.contains("</tbody>"))
                         break;
                     buffer.append(inputLine);
                 } else {
-                    if (inputLine.contains(readAfter))
+                    if (inputLine.contains("<tbody>"))
                         reading = true;
                 }
             }

@@ -8,7 +8,7 @@ import java.util.List;
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
- * @version 3.0
+ * @version 3.0.4
  */
 public class SchoolMenuParser {
 
@@ -74,44 +74,38 @@ public class SchoolMenuParser {
 
         // 0 - 조식, 1 - 중식, 2 - 석식
         int parsingMode = 0;
-
         for (int i = 1; i < chunk.length; i++) {
 
             if (chunk[i].trim().length() < 1)
                 continue;
-
-            if (chunk[i].equals("[조식]")) {
+            else if (chunk[i].equals("[조식]")) {
                 parsingMode = 0;
-                menu.breakfast = "";
                 continue;
             } else if (chunk[i].equals("[중식]")) {
                 parsingMode = 1;
-                menu.lunch = "";
                 continue;
             } else if (chunk[i].equals("[석식]")) {
                 parsingMode = 2;
-                menu.dinner = "";
                 continue;
             }
-
             switch (parsingMode) {
                 case 0:
                     if (menu.breakfast.length() > 1)
-                        menu.breakfast += "\n" + chunk[i];
+                        menu.breakfast.append("\n").append(chunk[i]);
                     else
-                        menu.breakfast += chunk[i];
+                        menu.breakfast.append(chunk[i]);
                     break;
                 case 1:
                     if (menu.lunch.length() > 1)
-                        menu.lunch += "\n" + chunk[i];
+                        menu.lunch.append("\n").append(chunk[i]);
                     else
-                        menu.lunch += chunk[i];
+                        menu.lunch.append(chunk[i]);
                     break;
                 case 2:
                     if (menu.dinner.length() > 1)
-                        menu.dinner += "\n" + chunk[i];
+                        menu.dinner.append("\n").append(chunk[i]);
                     else
-                        menu.dinner += chunk[i];
+                        menu.dinner.append(chunk[i]);
                     break;
             }
         }

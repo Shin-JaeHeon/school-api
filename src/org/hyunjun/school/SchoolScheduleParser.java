@@ -8,7 +8,7 @@ import java.util.List;
  * 전국 교육청 소속 교육기관의 학사일정, 메뉴를 간단히 불러올 수 있습니다.
  *
  * @author HyunJun Kim
- * @version 3.0
+ * @version 3.0.4
  */
 public class SchoolScheduleParser {
 
@@ -37,18 +37,17 @@ public class SchoolScheduleParser {
             for (int i = 1; i < chunk.length; i++) {
                 String trimmed = before(chunk[i], "</div>");
                 String date = before(after(trimmed, ">"), "</em>");
-
                 // 빈 공간은 파싱하지 않습니다.
-                if (date.length() < 1) continue;
-
-                // 일정이 있는 경우
-                if (trimmed.indexOf("<strong>") > 0) {
-                    String name = before(after(trimmed, "<strong>"), "</strong>");
-                    monthlySchedule.add(new SchoolSchedule(name));
-                }
-                // 일정이 없는 경우
-                else {
-                    monthlySchedule.add(new SchoolSchedule());
+                if (date.length() >= 1) {
+                    // 일정이 있는 경우
+                    if (trimmed.indexOf("<strong>") > 0) {
+                        String name = before(after(trimmed, "<strong>"), "</strong>");
+                        monthlySchedule.add(new SchoolSchedule(name));
+                    }
+                    // 일정이 없는 경우
+                    else {
+                        monthlySchedule.add(new SchoolSchedule());
+                    }
                 }
             }
             return monthlySchedule;
